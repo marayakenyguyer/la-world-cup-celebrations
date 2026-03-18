@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Celebrations — FIFA World Cup 2026 Los Angeles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --navy:       #1c2566;
+      --navy-dark:  #101840;
+      --blue:       #2B3990;
+      --gold:       #FFB81C;
+      --gold-lt:    #FFD166;
+      --green:      #2B9051;
+      --light:      #F4F6FB;
+      --white:      #FFFFFF;
+      --text:       #1a1a2e;
+      --muted:      #5a6475;
+      --border:     #DDE4F0;
+      --radius:     10px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; color: var(--text); background: var(--white); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--navy-dark);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      height: 60px;
+      box-shadow: 0 2px 20px rgba(0,0,0,.45);
+    }
+    .brand { display: flex; align-items: center; gap: .75rem; color: #fff; text-decoration: none; }
+    .brand-seal { font-size: 1.6rem; line-height: 1; }
+    .brand-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; line-height: 1.2; }
+    .brand-text span { display: block; font-size: .65rem; font-weight: 500; opacity: .6; text-transform: uppercase; letter-spacing: .8px; }
+    .nav-links { display: flex; align-items: center; gap: .1rem; }
+    .nav-tab {
+      color: rgba(255,255,255,.72);
+      font-size: .82rem;
+      font-weight: 600;
+      padding: .5rem .9rem;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+      text-decoration: none;
+      letter-spacing: .1px;
+    }
+    .nav-tab:hover { color: #fff; }
+    .nav-tab.active { color: #fff; border-bottom-color: var(--gold); }
+    .btn-nav {
+      background: var(--gold);
+      color: var(--navy-dark);
+      font-weight: 700;
+      font-size: .82rem;
+      padding: .45rem 1.1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: .1px;
+      margin-left: .5rem;
+      transition: opacity .2s;
+    }
+    .btn-nav:hover { opacity: .9; }
+    @media (max-width: 700px) { .nav-links { display: none; } }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(145deg, var(--navy-dark) 0%, #1a2e7a 55%, #0d1e4f 100%);
+      padding: 4.5rem 2rem 3.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 120%, rgba(255,184,28,.12) 0%, transparent 65%);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,184,28,.15);
+      border: 1px solid rgba(255,184,28,.35);
+      color: var(--gold);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: .35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.3rem;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      color: #fff;
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+    .hero h1 em { color: var(--gold); font-style: normal; }
+    .hero-sub {
+      color: rgba(255,255,255,.78);
+      font-size: clamp(.95rem, 2vw, 1.15rem);
+      max-width: 540px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy-dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      letter-spacing: .1px;
+      transition: transform .15s, box-shadow .15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,184,28,.4); }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .85rem 2rem;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,.45);
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+
+    /* COUNTDOWN */
+    .countdown {
+      display: inline-flex;
+      gap: 1.2rem;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 1rem 1.8rem;
+      border-radius: 12px;
+    }
+    .cd-unit { text-align: center; }
+    .cd-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.4rem;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+    .cd-label { font-size: .65rem; font-weight: 600; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: 1px; }
+    .cd-sep { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; color: rgba(255,255,255,.25); align-self: center; margin-top: -4px; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--gold);
+      padding: 1.1rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .25rem 2rem;
+      border-right: 1px solid rgba(28,37,102,.2);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: var(--navy-dark);
+      line-height: 1;
+    }
+    .stat-desc { font-size: .8rem; font-weight: 600; color: var(--navy); line-height: 1.25; }
+
+    /* ── SECTIONS ── */
+    .section { padding: 5rem 2rem; }
+    .section-light { background: var(--light); }
+    .container { max-width: 1140px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .55rem;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--navy);
+      line-height: 1.05;
+      text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+    .section-lead { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 680px; }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    @media (max-width: 800px) { .about-grid { grid-template-columns: 1fr; gap: 2rem; } }
+    .about-features { display: flex; flex-direction: column; gap: .9rem; margin-top: 1.6rem; }
+    .about-feat {
+      display: flex; align-items: flex-start; gap: .85rem;
+      background: var(--white); border: 1px solid var(--border);
+      padding: .9rem 1.1rem; border-radius: var(--radius);
+    }
+    .about-feat-icon {
+      font-size: 1.4rem; flex-shrink: 0;
+      background: var(--light); width: 2.4rem; height: 2.4rem;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .about-feat-text strong { display: block; font-size: .9rem; font-weight: 700; color: var(--navy); margin-bottom: .15rem; }
+    .about-feat-text p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+
+    .about-badge-col { display: flex; flex-direction: column; gap: 1.2rem; }
+    .about-badge {
+      background: var(--navy);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 1.8rem;
+    }
+    .about-badge.gold { background: var(--gold); color: var(--navy-dark); }
+    .about-badge-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 2.8rem; line-height: 1;
+      margin-bottom: .25rem;
+    }
+    .about-badge p { font-size: .88rem; font-weight: 500; opacity: .85; line-height: 1.45; }
+
+    /* ── WHAT TO EXPECT ── */
+    .expect-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .expect-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.4rem;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .expect-card:hover { box-shadow: 0 6px 24px rgba(27,37,102,.1); transform: translateY(-2px); }
+    .expect-card.enhanced { border-color: var(--gold); background: #fffdf4; }
+    .expect-icon { font-size: 2.2rem; margin-bottom: .85rem; display: block; }
+    .expect-card h3 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .4rem; }
+    .expect-card p { font-size: .82rem; color: var(--muted); line-height: 1.55; }
+    .expect-badge {
+      display: inline-block; font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; background: var(--gold); color: var(--navy-dark);
+      padding: .2rem .55rem; border-radius: 4px; margin-top: .6rem;
+    }
+
+    /* ── SITE FINDER ── */
+    .finder-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+    .region-filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .region-btn {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 600;
+      padding: .45rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .region-btn:hover { border-color: var(--navy); color: var(--navy); }
+    .region-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+    .finder-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 900px) { .finder-layout { grid-template-columns: 1fr; } }
+
+    #map {
+      height: 480px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      z-index: 1;
+    }
+    .site-cards { height: 480px; overflow-y: auto; display: flex; flex-direction: column; gap: .75rem; padding-right: 4px; }
+    .site-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      cursor: pointer;
+      transition: border-color .18s, box-shadow .18s;
+      flex-shrink: 0;
+    }
+    .site-card:hover, .site-card.active { border-color: var(--navy); box-shadow: 0 3px 14px rgba(27,37,102,.12); }
+    .site-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
+    .site-card-name { font-size: .9rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+    .site-card-hood { font-size: .75rem; color: var(--muted); }
+    .site-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: .8rem;
+      background: var(--navy); color: #fff;
+      width: 1.6rem; height: 1.6rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .site-card.enhanced .site-num { background: var(--gold); color: var(--navy-dark); }
+    .site-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
+    .tag {
+      font-size: .68rem; font-weight: 600; padding: .2rem .55rem;
+      border-radius: 4px; letter-spacing: .2px;
+    }
+    .tag-base { background: var(--light); color: var(--navy); }
+    .tag-enhanced { background: #fffbe6; color: #8a6000; border: 1px solid #ffe08a; }
+    .tag-cd { background: #eaf3ff; color: #1a4a8a; border: 1px solid #c0d8ff; }
+    .site-map-link {
+      font-size: .72rem; color: var(--blue); font-weight: 600; text-decoration: none;
+      display: inline-flex; align-items: center; gap: .25rem; margin-top: .5rem;
+    }
+    .site-map-link:hover { text-decoration: underline; }
+    .site-activations { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+
+    /* Leaflet custom markers */
+    .map-pin {
+      width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      background: var(--navy);
+      border: 2.5px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.35);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-pin.gold { background: var(--gold); border-color: var(--navy); }
+    .map-pin-num {
+      transform: rotate(45deg);
+      color: #fff; font-weight: 900; font-size: 9px;
+      font-family: 'Inter', sans-serif;
+    }
+    .map-pin.gold .map-pin-num { color: var(--navy-dark); }
+
+    /* ── SCHEDULE ── */
+    .schedule-controls {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .sched-filter {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: .5rem .9rem;
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      min-width: 180px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6475' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .8rem center;
+      padding-right: 2rem;
+    }
+    .sched-filter:focus { outline: 2px solid var(--blue); }
+    .sched-note {
+      font-size: .78rem; color: var(--muted); background: #fffbe6;
+      border: 1px solid #ffe08a; border-radius: 6px; padding: .4rem .85rem;
+      display: inline-flex; align-items: center; gap: .4rem;
+    }
+
+    .sched-table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+    .sched-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+    .sched-table thead { background: var(--navy); }
+    .sched-table th {
+      color: rgba(255,255,255,.85);
+      font-size: .72rem; font-weight: 700; letter-spacing: .6px;
+      text-transform: uppercase; padding: .8rem 1rem; text-align: left; white-space: nowrap;
+    }
+    .sched-table td {
+      padding: .75rem 1rem; border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .sched-table tr:last-child td { border-bottom: none; }
+    .sched-table tr:hover td { background: #f0f4ff; }
+    .sched-table tr.final-row td { background: #fffdf4; }
+    .sched-table tr.hidden { display: none; }
+
+    .phase-badge {
+      display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .5px; padding: .2rem .6rem; border-radius: 4px; white-space: nowrap;
+    }
+    .phase-group { background: #e8f0fe; color: #1a4a9a; }
+    .phase-r32   { background: #e6f4ea; color: #1a6a2a; }
+    .phase-r16   { background: #fce8b2; color: #6a4000; }
+    .phase-qf    { background: #fde7e7; color: #8a1a1a; }
+    .phase-sf    { background: #f3e8ff; color: #5a1a8a; }
+    .phase-final { background: var(--gold); color: var(--navy-dark); }
+
+    .site-chip {
+      display: inline-block; font-size: .75rem; font-weight: 600;
+      background: var(--light); color: var(--navy); border: 1px solid var(--border);
+      border-radius: 5px; padding: .18rem .55rem; margin: .15rem .1rem 0; white-space: nowrap;
+    }
+    .site-chip.enhanced-chip { background: #fffbe6; border-color: #ffe08a; color: #6a4800; }
+    .date-cell strong { display: block; font-size: .88rem; font-weight: 700; color: var(--navy); }
+    .date-cell span { font-size: .72rem; color: var(--muted); }
+    .day-num { font-size: .68rem; background: var(--navy); color: #fff; border-radius: 4px; padding: .1rem .4rem; font-weight: 700; }
+
+    /* ── FAQ ── */
+    .faq-list { display: flex; flex-direction: column; gap: .6rem; margin-top: 2rem; }
+    .faq-item {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; text-align: left; background: var(--white);
+      padding: 1.1rem 1.4rem; font-size: .95rem; font-weight: 600; color: var(--navy);
+      cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      border: none; gap: 1rem;
+      transition: background .15s;
+    }
+    .faq-q:hover { background: var(--light); }
+    .faq-q.open { background: var(--navy); color: #fff; }
+    .faq-chevron { font-size: 1rem; transition: transform .25s; flex-shrink: 0; }
+    .faq-q.open .faq-chevron { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden; transition: max-height .3s ease;
+      padding: 0 1.4rem;
+    }
+    .faq-a.open { max-height: 400px; padding: 1rem 1.4rem 1.2rem; }
+    .faq-a p, .faq-a ul { font-size: .9rem; color: var(--muted); line-height: 1.65; }
+    .faq-a ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: .25rem; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--navy-dark);
+      color: rgba(255,255,255,.7);
+      padding: 3rem 2rem 2rem;
+    }
+    .footer-inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
+    @media (max-width: 700px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand-name {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.3rem;
+      color: #fff; margin-bottom: .5rem;
+    }
+    .footer-desc { font-size: .83rem; line-height: 1.6; max-width: 320px; }
+    .footer h4 { color: #fff; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: .85rem; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+    .footer-links a { color: rgba(255,255,255,.65); font-size: .83rem; text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1140px; margin: 2rem auto 0;
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 1.2rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+      font-size: .75rem; color: rgba(255,255,255,.4);
+    }
+
+    /* ── SCROLL HINT on table ── */
+    .scroll-hint { font-size: .75rem; color: var(--muted); text-align: right; margin-bottom: .5rem; display: none; }
+    @media (max-width: 700px) { .scroll-hint { display: block; } }
+
+    /* ── MISC ── */
+    .disclaimer {
+      background: #fffbe6; border: 1px solid #ffe08a;
+      border-radius: 8px; padding: .75rem 1.1rem;
+      font-size: .8rem; color: #6a4800; margin-bottom: 1.5rem;
+      display: flex; align-items: flex-start; gap: .5rem;
+    }
+    .site-cards::-webkit-scrollbar { width: 5px; }
+    .site-cards::-webkit-scrollbar-track { background: var(--light); border-radius: 4px; }
+    .site-cards::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .view-toggle { display: flex; gap: .4rem; }
+    .view-btn {
+      background: var(--white); border: 1.5px solid var(--border);
+      color: var(--muted); font-size: .8rem; font-weight: 600;
+      padding: .4rem .85rem; border-radius: 6px; cursor: pointer; transition: all .2s;
+    }
+    .view-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <a href="#" class="brand">
+    <span class="brand-seal">🏛️</span>
+    <div class="brand-text">
+      City of Los Angeles
+      <span>Community Celebrations 2026</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#about" class="nav-tab">About</a>
+    <a href="#expect" class="nav-tab">What to Expect</a>
+    <a href="#finder" class="nav-tab">Find My Site</a>
+    <a href="#schedule" class="nav-tab">Schedule</a>
+    <a href="#faq" class="nav-tab">FAQ</a>
+    <a href="#finder" class="btn-nav">Find My Watch Party ⚽</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-eyebrow">⚽ FIFA World Cup 2026 &nbsp;·&nbsp; Los Angeles</div>
+  <h1>Watch the<br><em>World Cup</em><br>Together</h1>
+  <p class="hero-sub">100+ free neighborhood watch parties, powered by the City of Los Angeles. No ticket required — just bring your chairs, your neighbors, and your spirit.</p>
+  <div class="hero-ctas">
+    <a href="#finder" class="btn-primary">Find My Watch Party</a>
+    <a href="#schedule" class="btn-outline">View Full Schedule</a>
+  </div>
+  <div class="countdown" id="countdown">
+    <div class="cd-unit"><span class="cd-num" id="cd-days">—</span><span class="cd-label">Days</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" id="cd-hours">—</span><span class="cd-label">Hours</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" id="cd-mins">—</span><span class="cd-label">Mins</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" id="cd-secs">—</span><span class="cd-label">Secs</span></div>
+  </div>
+  <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-top:.7rem;">Until the Opening Kick-Off · June 12, 2026</div>
+</section>
+
+<!-- ═══ STATS BAR ═══ -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">100+</span>
+    <div class="stat-desc">Free<br>Celebrations</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">15</span>
+    <div class="stat-desc">Rec &amp; Park<br>Sites</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">34</span>
+    <div class="stat-desc">Match<br>Days</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">3</span>
+    <div class="stat-desc">Sites Active<br>Each Day</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">1K+</span>
+    <div class="stat-desc">Residents<br>Per Site</div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="section-eyebrow">About the Program</div>
+        <h2 class="section-title">The World Cup<br>in Every Neighborhood</h2>
+        <p class="section-lead" style="margin-bottom:1rem;">
+          While FIFA fan fests anchor downtown LA, Mayor Karen Bass's Community Celebrations program ensures the World Cup reaches every corner of the city — from the San Fernando Valley to the Harbor, from Westside parks to East LA recreation centers.
+        </p>
+        <p class="section-lead">
+          These free, family-friendly events transform City of LA Recreation &amp; Parks sites into vibrant gathering spaces where Angelenos watch the matches on large LED screens surrounded by youth soccer clinics, neighborhood programming, and community resources. No ticket, no cost, no barriers.
+        </p>
+        <div class="about-features">
+          <div class="about-feat">
+            <div class="about-feat-icon">🗺️</div>
+            <div class="about-feat-text">
+              <strong>Citywide Reach</strong>
+              <p>Sites span all 15 Council Districts, from Sylmar and Northridge to Wilmington and Venice Beach.</p>
+            </div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon">🔄</div>
+            <div class="about-feat-text">
+              <strong>Rotating Schedule</strong>
+              <p>3 sites activate each match day, with every site hosting 7 celebrations across the tournament.</p>
+            </div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon">🌟</div>
+            <div class="about-feat-text">
+              <strong>A Legacy Investment</strong>
+              <p>This program pilots the volunteer infrastructure and activation model that will scale to the 2027 Super Bowl and 2028 Olympic &amp; Paralympic Games.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-badge-col">
+        <div class="about-badge gold">
+          <div class="about-badge-num">June 12 – July 19</div>
+          <p>Tournament dates for the 2026 FIFA World Cup, with the Final played right here in Los Angeles.</p>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-num">All 15 Districts</div>
+          <p>Every Council District will host celebrations, ensuring no neighborhood is left out of the World Cup experience.</p>
+        </div>
+        <div class="about-badge" style="background:var(--green);">
+          <div class="about-badge-num">Free for All</div>
+          <p>No tickets, no registration required. Just show up, bring your blankets and chairs, and enjoy the game with your neighbors.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHAT TO EXPECT ═══ -->
+<section class="section section-light" id="expect">
+  <div class="container">
+    <div class="section-eyebrow">What's at Every Celebration</div>
+    <h2 class="section-title">What Residents Can Expect</h2>
+    <p class="section-lead">Every Community Celebration includes a core set of free activities. Select sites may offer additional programming based on their neighborhood and Council District.</p>
+    <div class="expect-grid">
+      <div class="expect-card">
+        <span class="expect-icon">📺</span>
+        <h3>Live Match Screenings</h3>
+        <p>Large mobile LED screens broadcast every World Cup match in real-time so you don't miss a goal.</p>
+      </div>
+      <div class="expect-card">
+        <span class="expect-icon">⚽</span>
+        <h3>PlayLA Soccer Clinics</h3>
+        <p>Free youth soccer mini-clinics and skill activities run by the City's PlayLA program for kids of all ages.</p>
+      </div>
+      <div class="expect-card">
+        <span class="expect-icon">🎉</span>
+        <h3>Family Fun Zones</h3>
+        <p>Interactive activities, flag-making stations, and family-friendly programming for all ages.</p>
+      </div>
+      <div class="expect-card">
+        <span class="expect-icon">🏛️</span>
+        <h3>City Services &amp; Resources</h3>
+        <p>Resource tables connecting residents with City departments, community organizations, and local services.</p>
+      </div>
+      <div class="expect-card enhanced">
+        <span class="expect-icon">🎵</span>
+        <h3>Music &amp; Arts</h3>
+        <p>Select sites feature live music, cultural performances, dance, and visual arts activations that reflect neighborhood identity.</p>
+        <span class="expect-badge">Enhanced Sites</span>
+      </div>
+      <div class="expect-card enhanced">
+        <span class="expect-icon">🍜</span>
+        <h3>Local Vendors &amp; Culture</h3>
+        <p>Some celebrations include local food vendors, small businesses, and neighborhood-led cultural activations.</p>
+        <span class="expect-badge">Enhanced Sites</span>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem;font-size:.82rem;color:var(--muted);">
+      💡 <strong>Bring your own</strong> blankets, chairs, and snacks. All events are free and open to the public.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ SITE FINDER ═══ -->
+<section class="section" id="finder">
+  <div class="container">
+    <div class="finder-header">
+      <div>
+        <div class="section-eyebrow">Find Your Watch Party</div>
+        <h2 class="section-title">Sites Across Los Angeles</h2>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-map-view" onclick="setView('map')">🗺 Map</button>
+        <button class="view-btn" id="btn-list-view" onclick="setView('list')">☰ List</button>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <span><strong>Placeholder Data:</strong> Site locations and schedules are preliminary and subject to change. Final confirmed sites and activation dates will be updated here as they are announced.</span>
+    </div>
+
+    <div class="region-filters" id="region-filters">
+      <button class="region-btn active" data-region="all">All Sites (17)</button>
+      <button class="region-btn" data-region="valley">San Fernando Valley</button>
+      <button class="region-btn" data-region="westside">Westside</button>
+      <button class="region-btn" data-region="central">Central LA</button>
+      <button class="region-btn" data-region="east">East / Northeast LA</button>
+      <button class="region-btn" data-region="south">South LA &amp; Harbor</button>
+    </div>
+
+    <div class="finder-layout" id="finder-map-view">
+      <div id="map"></div>
+      <div class="site-cards" id="site-cards"></div>
+    </div>
+
+    <!-- List view (hidden by default) -->
+    <div id="finder-list-view" style="display:none;">
+      <div class="sched-table-wrap">
+        <table class="sched-table" id="list-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Site Name</th>
+              <th>Neighborhood</th>
+              <th>Region</th>
+              <th>Features</th>
+              <th>Directions</th>
+            </tr>
+          </thead>
+          <tbody id="list-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCHEDULE ═══ -->
+<section class="section section-light" id="schedule">
+  <div class="container">
+    <div class="section-eyebrow">Full Tournament Schedule</div>
+    <h2 class="section-title">Watch Party Schedule</h2>
+    <p class="section-lead" style="margin-bottom:1.5rem;">See which sites are active on each match day. 3 sites rotate across the city for every game.</p>
+
+    <div class="disclaimer">
+      ⚠️ <span><strong>Placeholder Schedule:</strong> Dates, times, and site assignments are illustrative and will be updated as the official FIFA 2026 match schedule and site calendar are confirmed.</span>
+    </div>
+
+    <div class="schedule-controls">
+      <select class="sched-filter" id="filter-phase" onchange="filterSchedule()">
+        <option value="all">All Tournament Stages</option>
+        <option value="Group Stage">Group Stage</option>
+        <option value="Round of 32">Round of 32</option>
+        <option value="Round of 16">Round of 16</option>
+        <option value="Quarterfinals">Quarterfinals</option>
+        <option value="Semifinals">Semifinals</option>
+        <option value="Final">Final</option>
+      </select>
+      <select class="sched-filter" id="filter-site" onchange="filterSchedule()">
+        <option value="all">All Sites</option>
+      </select>
+      <button class="view-btn" onclick="resetSchedule()" style="font-size:.8rem;">↺ Reset</button>
+    </div>
+
+    <div class="scroll-hint">← Scroll horizontally to see all columns →</div>
+    <div class="sched-table-wrap">
+      <table class="sched-table">
+        <thead>
+          <tr>
+            <th>Match Day</th>
+            <th>Date</th>
+            <th>Stage</th>
+            <th>Site 1</th>
+            <th>Site 2</th>
+            <th>Site 3</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body"></tbody>
+      </table>
+    </div>
+    <p style="margin-top:1rem;font-size:.78rem;color:var(--muted);">
+      ⭐ = Enhanced activation with additional music, arts, or cultural programming at select sites.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq">
+  <div class="container" style="max-width:800px;">
+    <div class="section-eyebrow">Frequently Asked Questions</div>
+    <h2 class="section-title">What You Need to Know</h2>
+    <div class="faq-list" id="faq-list"></div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">⚽ Community Celebrations 2026</div>
+      <p class="footer-desc">A City of Los Angeles initiative bringing the 2026 FIFA World Cup to every neighborhood — free, accessible, and community-centered. Produced in partnership with LA Recreation &amp; Parks and the Mayor's Office.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="#about">About the Program</a></li>
+        <li><a href="#expect">What to Expect</a></li>
+        <li><a href="#finder">Find Your Site</a></li>
+        <li><a href="#schedule">Match Schedule</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>City Resources</h4>
+      <ul class="footer-links">
+        <li><a href="https://mayor.lacity.gov" target="_blank">Mayor Karen Bass</a></li>
+        <li><a href="https://www.laparks.org" target="_blank">LA Recreation &amp; Parks</a></li>
+        <li><a href="https://www.la28.org" target="_blank">LA28 Olympics</a></li>
+        <li><a href="https://www.fifa.com/fifaworldcup/2026" target="_blank">FIFA World Cup 2026</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 City of Los Angeles · All Rights Reserved</span>
+    <span>Produced by the Mayor's Office &amp; LA Recreation &amp; Parks</span>
+  </div>
+</footer>
+
+<!-- ═══ LEAFLET ═══ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+/* ═══════════════════════════════════
+   DATA
+═══════════════════════════════════ */
+const SITES = [
+  { id:1,  name:"Sycamore Grove Park",                   hood:"Highland Park",            region:"east",    lat:34.1101, lng:-118.2082, enhanced:false,  cdLed:false,
+    address:"4702 N Figueroa St, Los Angeles, CA 90042",
+    features:["LED Screen","PlayLA Clinics","Fun Zone"] },
+  { id:2,  name:"MacArthur Park Recreation Center",      hood:"MacArthur Park / Westlake",region:"central", lat:34.0582, lng:-118.2757, enhanced:true,   cdLed:true,
+    address:"2230 W 6th St, Los Angeles, CA 90057",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","City Services","Music & Arts"] },
+  { id:3,  name:"Whitsett Fields",                       hood:"Studio City / Sherman Oaks",region:"valley",  lat:34.1557, lng:-118.3832, enhanced:false,  cdLed:false,
+    address:"4876 Whitsett Ave, Studio City, CA 91604",
+    features:["LED Screen","PlayLA Clinics"] },
+  { id:4,  name:"Lanark Recreation Center",              hood:"Woodland Hills",           region:"valley",  lat:34.1884, lng:-118.5963, enhanced:false,  cdLed:false,
+    address:"21816 Lanark St, Canoga Park, CA 91304",
+    features:["LED Screen","PlayLA Clinics","Fun Zone"] },
+  { id:5,  name:"Van Nuys / Sherman Oaks Rec Center",    hood:"Van Nuys / Sherman Oaks",  region:"valley",  lat:34.1496, lng:-118.4660, enhanced:false,  cdLed:false,
+    address:"14201 Huston St, Sherman Oaks, CA 91401",
+    features:["LED Screen","PlayLA Clinics","City Services"] },
+  { id:6,  name:"Cheviot Hills / Rancho Park",           hood:"West Los Angeles",         region:"westside",lat:34.0317, lng:-118.4156, enhanced:true,   cdLed:false,
+    address:"2551 Motor Ave, Los Angeles, CA 90064",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","Music & Arts"] },
+  { id:7,  name:"Westwood Recreation Center",            hood:"Westwood",                 region:"westside",lat:34.0584, lng:-118.4480, enhanced:false,  cdLed:false,
+    address:"1350 S Sepulveda Blvd, Los Angeles, CA 90025",
+    features:["LED Screen","PlayLA Clinics","City Services"] },
+  { id:8,  name:"Sheldon Arleta Recreation Center",      hood:"Sun Valley / Arleta",      region:"valley",  lat:34.2415, lng:-118.3804, enhanced:false,  cdLed:false,
+    address:"12455 Wicks St, Sun Valley, CA 91352",
+    features:["LED Screen","PlayLA Clinics","Fun Zone"] },
+  { id:9,  name:"Sylmar Recreation Center",              hood:"Sylmar",                   region:"valley",  lat:34.3100, lng:-118.4700, enhanced:false,  cdLed:false,
+    address:"13109 Borden Ave, Sylmar, CA 91342",
+    features:["LED Screen","PlayLA Clinics"] },
+  { id:10, name:"Algin Sutton Recreation Center",        hood:"South Los Angeles",        region:"south",   lat:33.9837, lng:-118.2754, enhanced:true,   cdLed:false,
+    address:"8800 S Hoover St, Los Angeles, CA 90044",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","City Services","Cultural Programming"] },
+  { id:11, name:"South Park Recreation Center",          hood:"South Los Angeles",        region:"south",   lat:34.0088, lng:-118.2676, enhanced:false,  cdLed:false,
+    address:"345 E 51st St, Los Angeles, CA 90011",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","City Services"] },
+  { id:12, name:"Seoul International Park",              hood:"Koreatown / Wilshire",     region:"central", lat:34.0546, lng:-118.3106, enhanced:true,   cdLed:false,
+    address:"3201 W Olympic Blvd, Los Angeles, CA 90006",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","Cultural Programming","Music & Arts"] },
+  { id:13, name:"Venice Beach Recreation Center",        hood:"Venice",                   region:"westside",lat:33.9882, lng:-118.4690, enhanced:true,   cdLed:false,
+    address:"1800 Ocean Front Walk, Venice, CA 90291",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","Music & Arts","Local Vendors"] },
+  { id:14, name:"Northridge Recreation Center",          hood:"Northridge",               region:"valley",  lat:34.2280, lng:-118.5355, enhanced:false,  cdLed:false,
+    address:"18300 Lemarsh St, Northridge, CA 91325",
+    features:["LED Screen","PlayLA Clinics"] },
+  { id:15, name:"Echo Park Recreation Center",           hood:"Echo Park",                region:"central", lat:34.0784, lng:-118.2600, enhanced:true,   cdLed:false,
+    address:"1632 Bellevue Ave, Los Angeles, CA 90026",
+    features:["LED Screen","PlayLA Clinics","Fun Zone","Music & Arts","City Services"] },
+  { id:16, name:"El Sereno Recreation Center",           hood:"El Sereno",                region:"east",    lat:34.0820, lng:-118.1739, enhanced:false,  cdLed:false,
+    address:"4721 Klamath St, Los Angeles, CA 90032",
+    features:["LED Screen","PlayLA Clinics","City Services"] },
+  { id:17, name:"Wilmington Recreation Center",          hood:"Wilmington / Harbor",      region:"south",   lat:33.7833, lng:-118.2670, enhanced:false,  cdLed:false,
+    address:"325 Neptune Ave, Wilmington, CA 90744",
+    features:["LED Screen","PlayLA Clinics","City Services"] },
+];
+
+const REGION_LABELS = {
+  all:"All Sites", valley:"San Fernando Valley", westside:"Westside",
+  central:"Central LA", east:"East / Northeast LA", south:"South LA & Harbor"
+};
+
+// 34 Match Days
+const MD_DATES = [
+  "Fri, Jun 12","Sat, Jun 13","Sun, Jun 14","Mon, Jun 15","Tue, Jun 16",
+  "Wed, Jun 17","Thu, Jun 18","Fri, Jun 19","Sat, Jun 20","Sun, Jun 21",
+  "Mon, Jun 22","Tue, Jun 23","Wed, Jun 24","Thu, Jun 25","Fri, Jun 26",
+  "Sat, Jun 27","Sun, Jun 28","Mon, Jun 29","Tue, Jun 30","Wed, Jul 1",
+  "Thu, Jul 2","Fri, Jul 3","Sat, Jul 4","Sun, Jul 5","Mon, Jul 6",
+  "Tue, Jul 7","Wed, Jul 8","Thu, Jul 9","Fri, Jul 10","Sat, Jul 11",
+  "Sun, Jul 12","Mon, Jul 13","Tue, Jul 14","Sun, Jul 19"
+];
+
+function getPhase(dayIndex) {
+  if (dayIndex < 20) return "Group Stage";
+  if (dayIndex < 24) return "Round of 32";
+  if (dayIndex < 28) return "Round of 16";
+  if (dayIndex < 30) return "Quarterfinals";
+  if (dayIndex < 32) return "Semifinals";
+  if (dayIndex === 32) return "Third Place";
+  return "Final";
+}
+
+function getSitesForDay(d) {
+  const n = SITES.length;
+  return [SITES[d*3 % n], SITES[(d*3+1) % n], SITES[(d*3+2) % n]];
+}
+
+const SCHEDULE = MD_DATES.map((date, i) => ({
+  day: i + 1,
+  date,
+  phase: getPhase(i),
+  sites: getSitesForDay(i)
+}));
+
+/* ═══════════════════════════════════
+   COUNTDOWN
+═══════════════════════════════════ */
+function updateCountdown() {
+  const target = new Date("2026-06-12T00:00:00-07:00").getTime();
+  const now = Date.now();
+  const diff = target - now;
+  if (diff <= 0) {
+    document.getElementById("countdown").innerHTML =
+      '<span style="color:var(--gold);font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:1.6rem;">The World Cup is here! ⚽</span>';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById("cd-days").textContent  = String(d).padStart(2,"0");
+  document.getElementById("cd-hours").textContent = String(h).padStart(2,"0");
+  document.getElementById("cd-mins").textContent  = String(m).padStart(2,"0");
+  document.getElementById("cd-secs").textContent  = String(s).padStart(2,"0");
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ═══════════════════════════════════
+   MAP
+═══════════════════════════════════ */
+let map, markers = {}, currentRegion = "all", activeCardId = null;
+
+function initMap() {
+  map = L.map("map", { zoomControl: true }).setView([34.05, -118.35], 10);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  SITES.forEach(site => {
+    const icon = L.divIcon({
+      html: `<div class="map-pin${site.enhanced ? " gold" : ""}">
+               <span class="map-pin-num">${site.id}</span>
+             </div>`,
+      className: "",
+      iconSize: [28, 28],
+      iconAnchor: [14, 28],
+      popupAnchor: [0, -30]
+    });
+
+    const marker = L.marker([site.lat, site.lng], { icon })
+      .addTo(map)
+      .bindPopup(buildPopup(site), { maxWidth: 260 });
+
+    marker.on("click", () => {
+      highlightCard(site.id);
+    });
+    markers[site.id] = marker;
+  });
+}
+
+function buildPopup(site) {
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.address)}`;
+  const tagHtml = site.features.slice(0, 3).map(f =>
+    `<span style="background:#e8f0fe;color:#1a3a8a;font-size:.68rem;font-weight:600;padding:.15rem .45rem;border-radius:4px;margin:.1rem .05rem;display:inline-block;">${f}</span>`
+  ).join("");
+  return `
+    <div style="font-family:'Inter',sans-serif;min-width:210px;">
+      <div style="font-weight:800;font-size:.92rem;color:#1c2566;margin-bottom:.2rem;">${site.name}</div>
+      <div style="font-size:.76rem;color:#5a6475;margin-bottom:.5rem;">${site.hood}</div>
+      <div style="font-size:.72rem;color:#1c2566;margin-bottom:.45rem;">📍 ${site.address}</div>
+      <div style="margin-bottom:.6rem;">${tagHtml}</div>
+      ${site.cdLed ? '<div style="font-size:.68rem;font-weight:700;color:#1a4a8a;background:#eaf3ff;padding:.2rem .5rem;border-radius:4px;margin-bottom:.5rem;display:inline-block;">Council District-Led</div>' : ""}
+      <a href="${mapsUrl}" target="_blank" style="display:inline-block;background:#1c2566;color:#fff;font-size:.75rem;font-weight:700;padding:.35rem .8rem;border-radius:6px;text-decoration:none;">Get Directions ↗</a>
+    </div>`;
+}
+
+function highlightCard(siteId) {
+  document.querySelectorAll(".site-card").forEach(c => c.classList.remove("active"));
+  const card = document.getElementById("card-" + siteId);
+  if (card) {
+    card.classList.add("active");
+    card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  activeCardId = siteId;
+}
+
+/* ═══════════════════════════════════
+   SITE CARDS
+═══════════════════════════════════ */
+function buildCards(region) {
+  const container = document.getElementById("site-cards");
+  container.innerHTML = "";
+  const filtered = region === "all" ? SITES : SITES.filter(s => s.region === region);
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="padding:2rem;color:var(--muted);text-align:center;">No sites in this region.</div>';
+    return;
+  }
+
+  filtered.forEach(site => {
+    const card = document.createElement("div");
+    card.className = "site-card" + (site.enhanced ? " enhanced" : "");
+    card.id = "card-" + site.id;
+
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.address)}`;
+    const tagHtml = site.features.map(f => {
+      const isEnhanced = ["Music & Arts","Cultural Programming","Local Vendors"].includes(f);
+      return `<span class="tag ${isEnhanced ? "tag-enhanced" : "tag-base"}">${f}</span>`;
+    }).join("");
+    const activeDays = getActiveDaysForSite(site.id);
+
+    card.innerHTML = `
+      <div class="site-card-header">
+        <div>
+          <div class="site-card-name">${site.name}${site.enhanced ? " ⭐" : ""}</div>
+          <div class="site-card-hood">${site.hood}</div>
+        </div>
+        <div class="site-num">${site.id}</div>
+      </div>
+      <div class="site-tags">${tagHtml}${site.cdLed ? '<span class="tag tag-cd">Council District-Led</span>' : ""}</div>
+      <div class="site-activations">🗓 Active on: ${activeDays}</div>
+      <a href="${mapsUrl}" target="_blank" class="site-map-link">📍 Get Directions →</a>`;
+
+    card.addEventListener("click", () => {
+      if (markers[site.id]) {
+        map.setView([site.lat, site.lng], 14, { animate: true });
+        markers[site.id].openPopup();
+      }
+      highlightCard(site.id);
+    });
+    container.appendChild(card);
+  });
+}
+
+function getActiveDaysForSite(siteId) {
+  const days = SCHEDULE.filter(md => md.sites.some(s => s.id === siteId));
+  if (days.length === 0) return "TBD";
+  return days.map(d => `MD ${d.day}`).join(", ");
+}
+
+/* ═══════════════════════════════════
+   REGION FILTER
+═══════════════════════════════════ */
+document.getElementById("region-filters").addEventListener("click", e => {
+  const btn = e.target.closest(".region-btn");
+  if (!btn) return;
+  document.querySelectorAll(".region-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const region = btn.dataset.region;
+  currentRegion = region;
+  buildCards(region);
+  updateMapMarkers(region);
+});
+
+function updateMapMarkers(region) {
+  SITES.forEach(site => {
+    const m = markers[site.id];
+    if (!m) return;
+    if (region === "all" || site.region === region) {
+      m.setOpacity(1);
+    } else {
+      m.setOpacity(0.2);
+    }
+  });
+  if (region !== "all") {
+    const visible = SITES.filter(s => s.region === region);
+    if (visible.length > 0) {
+      const bounds = L.latLngBounds(visible.map(s => [s.lat, s.lng]));
+      map.fitBounds(bounds, { padding: [40, 40] });
+    }
+  } else {
+    map.setView([34.05, -118.35], 10);
+  }
+}
+
+/* ═══════════════════════════════════
+   VIEW TOGGLE
+═══════════════════════════════════ */
+function setView(v) {
+  if (v === "map") {
+    document.getElementById("finder-map-view").style.display = "";
+    document.getElementById("finder-list-view").style.display = "none";
+    document.getElementById("btn-map-view").classList.add("active");
+    document.getElementById("btn-list-view").classList.remove("active");
+    setTimeout(() => map.invalidateSize(), 100);
+  } else {
+    document.getElementById("finder-map-view").style.display = "none";
+    document.getElementById("finder-list-view").style.display = "";
+    document.getElementById("btn-map-view").classList.remove("active");
+    document.getElementById("btn-list-view").classList.add("active");
+    buildListTable(currentRegion);
+  }
+}
+
+function buildListTable(region) {
+  const tbody = document.getElementById("list-body");
+  tbody.innerHTML = "";
+  const filtered = region === "all" ? SITES : SITES.filter(s => s.region === region);
+  filtered.forEach(site => {
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.address)}`;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><strong style="color:var(--navy);">${site.id}</strong></td>
+      <td><strong>${site.name}</strong>${site.enhanced ? " ⭐" : ""}<br><span style="font-size:.72rem;color:var(--muted);">${site.cdLed ? "Council District-Led" : ""}</span></td>
+      <td>${site.hood}</td>
+      <td><span style="font-size:.75rem;font-weight:600;color:var(--navy);">${REGION_LABELS[site.region]}</span></td>
+      <td style="max-width:220px;">${site.features.map(f => `<span class="tag tag-base" style="margin:.1rem .05rem;display:inline-block;">${f}</span>`).join("")}</td>
+      <td><a href="${mapsUrl}" target="_blank" style="color:var(--blue);font-weight:600;font-size:.8rem;text-decoration:none;">Directions ↗</a></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ═══════════════════════════════════
+   SCHEDULE TABLE
+═══════════════════════════════════ */
+const PHASE_CLASS = {
+  "Group Stage":"phase-group", "Round of 32":"phase-r32",
+  "Round of 16":"phase-r16", "Quarterfinals":"phase-qf",
+  "Semifinals":"phase-sf", "Third Place":"phase-sf", "Final":"phase-final"
+};
+
+function buildScheduleTable() {
+  const tbody = document.getElementById("schedule-body");
+  // Populate site filter
+  const sel = document.getElementById("filter-site");
+  SITES.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.id;
+    opt.textContent = s.name;
+    sel.appendChild(opt);
+  });
+
+  SCHEDULE.forEach(md => {
+    const tr = document.createElement("tr");
+    if (md.phase === "Final") tr.classList.add("final-row");
+    tr.dataset.phase = md.phase;
+    tr.dataset.siteIds = md.sites.map(s => s.id).join(",");
+    tr.innerHTML = `
+      <td><span class="day-num">MD ${md.day}</span></td>
+      <td class="date-cell"><strong>${md.date}</strong></td>
+      <td><span class="phase-badge ${PHASE_CLASS[md.phase] || "phase-group"}">${md.phase}</span></td>
+      ${md.sites.map(s => `<td><span class="site-chip${s.enhanced ? " enhanced-chip" : ""}">${s.enhanced ? "⭐ " : ""}${s.name}</span><br><span style="font-size:.68rem;color:var(--muted);">${s.hood}</span></td>`).join("")}`;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterSchedule() {
+  const phase = document.getElementById("filter-phase").value;
+  const siteId = document.getElementById("filter-site").value;
+  document.querySelectorAll("#schedule-body tr").forEach(tr => {
+    const matchPhase = phase === "all" || tr.dataset.phase === phase;
+    const matchSite  = siteId === "all" || tr.dataset.siteIds.split(",").includes(siteId);
+    tr.classList.toggle("hidden", !(matchPhase && matchSite));
+  });
+}
+
+function resetSchedule() {
+  document.getElementById("filter-phase").value = "all";
+  document.getElementById("filter-site").value  = "all";
+  filterSchedule();
+}
+
+/* ═══════════════════════════════════
+   FAQ
+═══════════════════════════════════ */
+const FAQS = [
+  {
+    q: "Do I need a ticket or registration to attend?",
+    a: "No tickets, no registration, and no cost. Community Celebrations are fully free and open to all Los Angeles residents and visitors. Simply show up at the listed Recreation & Parks site."
+  },
+  {
+    q: "What should I bring?",
+    a: "We recommend bringing:<ul><li>Folding chairs or a blanket to sit on</li><li>Water and snacks</li><li>Sunscreen (events are outdoors in summer)</li><li>Your energy and World Cup spirit!</li></ul>Some enhanced sites may have food vendors on-site."
+  },
+  {
+    q: "Are the events indoors or outdoors?",
+    a: "All Community Celebrations are held outdoors at LA Recreation & Parks sites, leveraging existing park infrastructure. Shade and cooling stations will be available at select locations given the summer heat."
+  },
+  {
+    q: "Which sites are active on a given day?",
+    a: "3 sites are activated on each of the 34 match days, rotating across all 15+ sites so that each neighborhood hosts 7 celebrations during the tournament. Use the Schedule section above to see which sites are active on each match day."
+  },
+  {
+    q: "What is PlayLA?",
+    a: "PlayLA is the City of Los Angeles's youth sports program run by Recreation & Parks. At each Community Celebration, PlayLA will offer free soccer mini-clinics and skill activities for kids of all ages — from beginners to advanced players."
+  },
+  {
+    q: "What makes some sites 'enhanced'?",
+    a: "All sites include the core experience: LED screen, PlayLA clinics, and a fun zone. Select sites designated as 'enhanced' (marked with ⭐) may additionally offer live music, cultural performances, local food vendors, visual arts, or neighborhood-specific programming organized by the local Council District or community partners."
+  },
+  {
+    q: "Is there parking available?",
+    a: "Parking availability varies by site. We encourage residents to use public transit, bike, or walk when possible. Check individual Recreation & Parks site pages for specific parking information. Transit directions are available via the 'Get Directions' link for each site."
+  },
+  {
+    q: "Are the events accessible for people with disabilities?",
+    a: "All City of LA Recreation & Parks sites are ADA-accessible. The City is committed to ensuring these events are welcoming to residents of all abilities. Contact the individual rec center for specific accessibility accommodations."
+  },
+  {
+    q: "How is this different from the official FIFA Fan Fest?",
+    a: "The official FIFA Fan Fest is a large-scale, ticketed event in downtown Los Angeles. The City's Community Celebrations are intentionally neighborhood-based — bringing the World Cup experience directly to local parks, free of charge, in all 15 Council Districts across the city."
+  },
+  {
+    q: "How can my organization get involved as a partner or volunteer?",
+    a: "The City is actively seeking community partners and corporate volunteers through its 'Adopt a Day' and 'Adopt a District' programs. Organizations can provide volunteers, in-kind support, or enhanced programming. For partnership inquiries, contact the Mayor's Office of Special Events."
+  }
+];
+
+function buildFAQ() {
+  const list = document.getElementById("faq-list");
+  FAQS.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "faq-item";
+    div.innerHTML = `
+      <button class="faq-q" onclick="toggleFAQ(${i}, this)">
+        <span>${item.q}</span>
+        <span class="faq-chevron">▾</span>
+      </button>
+      <div class="faq-a" id="faq-a-${i}"><p>${item.a}</p></div>`;
+    list.appendChild(div);
+  });
+}
+
+function toggleFAQ(i, btn) {
+  const a = document.getElementById("faq-a-" + i);
+  const isOpen = a.classList.contains("open");
+  document.querySelectorAll(".faq-a").forEach(el => el.classList.remove("open"));
+  document.querySelectorAll(".faq-q").forEach(el => el.classList.remove("open"));
+  if (!isOpen) { a.classList.add("open"); btn.classList.add("open"); }
+}
+
+/* ═══════════════════════════════════
+   NAV ACTIVE STATE
+═══════════════════════════════════ */
+const sections = document.querySelectorAll("section[id], div[id='finder']");
+const navTabs = document.querySelectorAll(".nav-tab");
+window.addEventListener("scroll", () => {
+  let current = "";
+  sections.forEach(sec => {
+    if (window.scrollY + 80 >= sec.offsetTop) current = sec.id;
+  });
+  navTabs.forEach(tab => {
+    tab.classList.toggle("active", tab.getAttribute("href") === "#" + current);
+  });
+}, { passive: true });
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+  initMap();
+  buildCards("all");
+  buildScheduleTable();
+  buildFAQ();
+});
+</script>
+</body>
+</html>
