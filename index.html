@@ -49,7 +49,7 @@ a{color:var(--blue)}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(244,255,129,.15);border:1px solid rgba(244,255,129,.4);color:var(--yellow);font-size:.75rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:.35rem 1rem;border-radius:20px;margin-bottom:1rem}
 .hero h1{font-weight:900;font-size:clamp(2.4rem,6vw,4.5rem);color:#fff;line-height:.95;text-transform:uppercase;letter-spacing:-1px;margin-bottom:.8rem}
 .hero h1 em{color:var(--yellow);font-style:normal}
-.hero-sub{color:rgba(255,255,255,.82);font-size:clamp(.9rem,2vw,1.1rem);max-width:540px;margin:0 auto 1.5rem;line-height:1.6}
+.hero-sub{color:rgba(255,255,255,.95);font-size:clamp(.9rem,2vw,1.1rem);max-width:540px;margin:0 auto 1.5rem;line-height:1.6}
 .hero-row{display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap}
 .hero-player,.hero-ball{position:absolute;bottom:0;pointer-events:none;user-select:none;z-index:0}
 .hero-player{right:-2rem;height:78%;max-height:360px;opacity:.88;filter:hue-rotate(-55deg) saturate(1.2) brightness(1.08)}
@@ -60,7 +60,7 @@ a{color:var(--blue)}
 .countdown{display:inline-flex;gap:1rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:.8rem 1.5rem;border-radius:12px}
 .cd-unit{text-align:center}
 .cd-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2rem;color:var(--yellow);line-height:1;display:block}
-.cd-label{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px}
+.cd-label{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.9);text-transform:uppercase;letter-spacing:1px}
 .cd-sep{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;color:rgba(255,255,255,.3);align-self:center;margin-top:-4px}
 
 /* Stats bar */
@@ -154,7 +154,7 @@ a{color:var(--blue)}
 
 /* Language Bar */
 .lang-bar{background:var(--blue-dk);padding:.45rem 2rem;display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap}
-.lang-bar-label{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px;margin-right:.4rem}
+.lang-bar-label{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.8px;margin-right:.4rem}
 .lang-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);font-size:.75rem;font-weight:600;padding:.3rem .7rem;border-radius:5px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none}
 .lang-btn:hover,.lang-btn:focus{background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.35)}
 .lang-btn.active{background:var(--yellow);color:var(--blue-dk);border-color:var(--yellow);font-weight:700}
@@ -174,15 +174,15 @@ a{color:var(--blue)}
 
 <!-- LANGUAGE BAR -->
 <nav class="lang-bar notranslate" translate="no" aria-label="Language selection">
-  <span class="lang-bar-label">🌐 Language:</span>
-  <button class="lang-btn active" onclick="switchLang('en')" aria-label="English">English</button>
-  <button class="lang-btn" onclick="switchLang('es')" aria-label="Español">Español</button>
-  <button class="lang-btn" onclick="switchLang('ko')" aria-label="한국어">한국어</button>
-  <button class="lang-btn" onclick="switchLang('zh-TW')" aria-label="繁體中文">繁體中文</button>
-  <button class="lang-btn" onclick="switchLang('hy')" aria-label="Հայերեն">Հայերեն</button>
-  <button class="lang-btn" onclick="switchLang('tl')" aria-label="Tagalog">Tagalog</button>
-  <button class="lang-btn" onclick="switchLang('fa')" aria-label="فارسی">فارسی</button>
-  <span style="font-size:.65rem;color:rgba(255,255,255,.35);margin-left:.5rem">More languages coming soon</span>
+  <span class="lang-bar-label"><span aria-hidden="true">🌐</span> Language:</span>
+  <button class="lang-btn active" onclick="switchLang('en')" aria-label="English" aria-pressed="true">English</button>
+  <button class="lang-btn" onclick="switchLang('es')" aria-label="Español" aria-pressed="false">Español</button>
+  <button class="lang-btn" onclick="switchLang('ko')" aria-label="한국어" aria-pressed="false">한국어</button>
+  <button class="lang-btn" onclick="switchLang('zh-TW')" aria-label="繁體中文" aria-pressed="false">繁體中文</button>
+  <button class="lang-btn" onclick="switchLang('hy')" aria-label="Հայերեն" aria-pressed="false">Հայերեն</button>
+  <button class="lang-btn" onclick="switchLang('tl')" aria-label="Tagalog" aria-pressed="false">Tagalog</button>
+  <button class="lang-btn" onclick="switchLang('fa')" aria-label="فارسی" aria-pressed="false">فارسی</button>
+
 </nav>
 
 <!-- HERO -->
@@ -203,11 +203,11 @@ a{color:var(--blue)}
     <div class="cd-unit"><span class="cd-num" id="cd-secs">—</span><span class="cd-label" data-i18n="cdSecs">Secs</span></div>
   </div>
 </div>
-<div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:.6rem"data-i18n="cdUntil">Until the Opening Kick-Off · June 11, 2026</div>
+<div style="font-size:.7rem;color:rgba(255,255,255,.75);margin-top:.6rem"data-i18n="cdUntil">Until the Opening Kick-Off · June 11, 2026</div>
 </header>
 
 <!-- STATS BAR -->
-<div class="stats-bar" role="status" aria-label="Event statistics">
+<div class="stats-bar" role="region" aria-label="Event statistics">
   <div class="stat-item"><span class="stat-num">18</span><div class="stat-desc" data-i18n="statParks">Park<br>Sites</div></div>
   <div class="stat-item"><span class="stat-num">100+</span><div class="stat-desc" data-i18n="statScreenings">Free<br>Screenings</div></div>
   <div class="stat-item"><span class="stat-num">34</span><div class="stat-desc" data-i18n="statDays">Match<br>Days</div></div>
@@ -774,8 +774,12 @@ function switchLang(lang){
   // Update active button
   document.querySelectorAll(".lang-btn").forEach(btn => {
     btn.classList.remove("active");
+    btn.setAttribute("aria-pressed", "false");
     const attr = btn.getAttribute("onclick") || "";
-    if(attr.includes("'" + lang + "'")) btn.classList.add("active");
+    if(attr.includes("'" + lang + "'")){
+      btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
+    }
   });
 
   // Update HTML lang attribute
@@ -815,7 +819,7 @@ function buildFAQ(){
   const faqs = window.LANG.faq || T.en.faq;
   faqs.forEach((item,i)=>{
     const div=document.createElement("div");div.className="faq-item";
-    div.innerHTML=`<button class="faq-q" aria-expanded="false" aria-controls="faq-a-${i}"><span>${item.q}</span><span class="faq-chevron" aria-hidden="true">▾</span></button><div class="faq-a" id="faq-a-${i}" role="region"><div class="faq-a-inner">${item.a}</div></div>`;
+    div.innerHTML=`<button id="faq-btn-${i}" class="faq-q" aria-expanded="false" aria-controls="faq-a-${i}"><span>${item.q}</span><span class="faq-chevron" aria-hidden="true">▾</span></button><div class="faq-a" id="faq-a-${i}" role="region" aria-labelledby="faq-btn-${i}"><div class="faq-a-inner">${item.a}</div></div>`;
     const btn=div.querySelector(".faq-q");
     btn.addEventListener("click",()=>{
       const a=div.querySelector(".faq-a"),isOpen=a.classList.contains("open");
@@ -1306,8 +1310,8 @@ function MapView({sites,selectedSite,onSelectSite,filteredLocationIds}){
       const transit=TRANSIT_BY_ID[site.id];
       let transitHtml="";
       if(transit){
-        const rails=(transit.transit?.rail||[]).map(r=>`<span style="display:inline-block;background:#304FFE;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin:1px">${r.line} · ${r.walk_min}min walk</span>`).join("");
-        const buses=(transit.transit?.bus||[]).slice(0,3).map(b=>`<span style="display:inline-block;background:#eee;color:#333;font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;margin:1px">${b.line}</span>`).join("");
+        const rails=(transit.transit?.rail||[]).map(r=>{const c=getTransitColor(r.line);return`<span style="display:inline-block;background:${c.bg};color:${c.color};font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin:1px">${r.line} · ${r.walk_min}min walk</span>`;}).join("");
+        const buses=(transit.transit?.bus||[]).slice(0,3).map(b=>{const c=getTransitColor(b.line);return`<span style="display:inline-block;background:${c.bg};color:${c.color};font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;margin:1px">${b.line}</span>`;}).join("");
         transitHtml=`<div style="margin-top:6px;border-top:1px solid #ddd;padding-top:5px"><div style="font-size:9px;font-weight:700;color:#555;margin-bottom:3px">🚌 TRANSIT</div>${rails}${buses}</div>`;
       }
       const freeLabel=site.free==="Yes"?`<span style="background:#e8f5e9;color:#2e7d32;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px">FREE</span>`:`<span style="background:#fde7e7;color:#8a1a1a;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px">TICKETED</span>`;
@@ -1322,6 +1326,27 @@ function MapView({sites,selectedSite,onSelectSite,filteredLocationIds}){
 }
 
 // ─── TRANSIT PANEL ───
+function getTransitColor(name){
+  const n=name||"";
+  if(/A Line|Gold Line/i.test(n))return{bg:"#c89a35",color:"#fff"};
+  if(/B Line|Red Line/i.test(n))return{bg:"#e0242a",color:"#fff"};
+  if(/C Line|Green Line/i.test(n))return{bg:"#58a738",color:"#fff"};
+  if(/D Line|Purple Line/i.test(n))return{bg:"#a05da5",color:"#fff"};
+  if(/E Line|Expo/i.test(n))return{bg:"#1a8cbd",color:"#fff"};
+  if(/G Line|Orange Line/i.test(n))return{bg:"#f7931d",color:"#fff"};
+  if(/J Line|Silver Line/i.test(n))return{bg:"#a0a2a3",color:"#333"};
+  if(/K Line|Crenshaw/i.test(n))return{bg:"#e96bb0",color:"#fff"};
+  if(/L Line/i.test(n))return{bg:"#c89a35",color:"#fff"};
+  if(/Metrolink/i.test(n))return{bg:"#f58220",color:"#fff"};
+  if(/Big Blue/i.test(n))return{bg:"#0072bc",color:"#fff"};
+  if(/Culver City/i.test(n))return{bg:"#2e8b57",color:"#fff"};
+  if(/DASH/i.test(n))return{bg:"#004b87",color:"#fff"};
+  if(/LADOT/i.test(n))return{bg:"#d32f2f",color:"#fff"};
+  if(/Foothill/i.test(n))return{bg:"#8dc63f",color:"#fff"};
+  if(/Metro Local|Metro Rapid/i.test(n))return{bg:"#f26722",color:"#fff"};
+  return{bg:"#555",color:"#fff"};
+}
+
 function TransitInfo({siteId}){
   const transit=TRANSIT_BY_ID[siteId];
   if(!transit)return null;
@@ -1330,14 +1355,14 @@ function TransitInfo({siteId}){
   if(!rails.length&&!buses.length)return null;
   return(<div style={{marginTop:8,padding:"8px 10px",background:"var(--light)",borderRadius:6,fontSize:12}}>
     <div style={{fontWeight:700,fontSize:11,color:"var(--muted)",marginBottom:4}}>{L.uiTransitOptions}</div>
-    {rails.map((r,i)=><div key={"r"+i} style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}>
-      <span style={{background:"#304FFE",color:"#fff",fontSize:10,fontWeight:700,padding:"1px 6px",borderRadius:3}}>🚇</span>
+    {rails.map((r,i)=>{const c=getTransitColor(r.line);return(<div key={"r"+i} style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}>
+      <span style={{background:c.bg,color:c.color,fontSize:10,fontWeight:700,padding:"1px 6px",borderRadius:3}}>🚇</span>
       <span style={{color:"var(--text)",fontSize:11}}>{r.line} — {r.station} ({r.walk_min} min walk)</span>
-    </div>)}
-    {buses.slice(0,4).map((b,i)=><div key={"b"+i} style={{display:"flex",alignItems:"center",gap:6,marginBottom:2}}>
-      <span style={{background:"var(--orange)",color:"#fff",fontSize:10,fontWeight:700,padding:"1px 6px",borderRadius:3}}>🚌</span>
+    </div>)})}
+    {buses.slice(0,4).map((b,i)=>{const c=getTransitColor(b.line);return(<div key={"b"+i} style={{display:"flex",alignItems:"center",gap:6,marginBottom:2}}>
+      <span style={{background:c.bg,color:c.color,fontSize:10,fontWeight:700,padding:"1px 6px",borderRadius:3}}>🚌</span>
       <span style={{color:"var(--text)",fontSize:11}}>{b.line}</span>
-    </div>)}
+    </div>)})}
     {transit.notes&&<div style={{fontSize:10,color:"var(--muted)",marginTop:4,fontStyle:"italic"}}>{transit.notes}</div>}
   </div>);
 }
