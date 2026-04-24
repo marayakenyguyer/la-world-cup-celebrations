@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kick It In the Park · Los Angeles Community Celebrations</title>
 <meta name="description" content="Free World Cup 2026 watch parties across Los Angeles parks. Find your nearest celebration, filter by date, team, or location.">
@@ -1328,6 +1329,13 @@ function MapView({sites,selectedSite,onSelectSite,filteredLocationIds}){
 // ─── TRANSIT PANEL ───
 function getTransitColor(name){
   const n=name||"";
+  if(/Metro Local|Metro Rapid/i.test(n))return{bg:"#f26722",color:"#fff"};
+  if(/Big Blue/i.test(n))return{bg:"#0072bc",color:"#fff"};
+  if(/Culver City/i.test(n))return{bg:"#2e8b57",color:"#fff"};
+  if(/DASH/i.test(n))return{bg:"#004b87",color:"#fff"};
+  if(/LADOT/i.test(n))return{bg:"#d32f2f",color:"#fff"};
+  if(/Foothill/i.test(n))return{bg:"#8dc63f",color:"#fff"};
+  if(/Metrolink/i.test(n))return{bg:"#f58220",color:"#fff"};
   if(/A Line|Gold Line/i.test(n))return{bg:"#c89a35",color:"#fff"};
   if(/B Line|Red Line/i.test(n))return{bg:"#e0242a",color:"#fff"};
   if(/C Line|Green Line/i.test(n))return{bg:"#58a738",color:"#fff"};
@@ -1337,13 +1345,6 @@ function getTransitColor(name){
   if(/J Line|Silver Line/i.test(n))return{bg:"#a0a2a3",color:"#333"};
   if(/K Line|Crenshaw/i.test(n))return{bg:"#e96bb0",color:"#fff"};
   if(/L Line/i.test(n))return{bg:"#c89a35",color:"#fff"};
-  if(/Metrolink/i.test(n))return{bg:"#f58220",color:"#fff"};
-  if(/Big Blue/i.test(n))return{bg:"#0072bc",color:"#fff"};
-  if(/Culver City/i.test(n))return{bg:"#2e8b57",color:"#fff"};
-  if(/DASH/i.test(n))return{bg:"#004b87",color:"#fff"};
-  if(/LADOT/i.test(n))return{bg:"#d32f2f",color:"#fff"};
-  if(/Foothill/i.test(n))return{bg:"#8dc63f",color:"#fff"};
-  if(/Metro Local|Metro Rapid/i.test(n))return{bg:"#f26722",color:"#fff"};
   return{bg:"#555",color:"#fff"};
 }
 
