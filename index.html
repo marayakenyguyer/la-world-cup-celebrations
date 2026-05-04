@@ -164,7 +164,8 @@ a{color:var(--blue)}
 .footer-bottom{max-width:1140px;margin:2rem auto 0;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:.72rem;flex-wrap:wrap;gap:.5rem}
 
 /* Language Bar */
-.lang-bar{background:var(--blue-dk);padding:.45rem 2rem;display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap}
+.lang-bar{background:var(--blue-dk);padding:.45rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:.4rem;flex-wrap:wrap}
+.lang-bar-langs{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
 .lang-bar-label{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.8px;margin-right:.4rem}
 .lang-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);font-size:.75rem;font-weight:600;padding:.3rem .7rem;border-radius:5px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none}
 .lang-btn:hover,.lang-btn:focus{background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.35)}
@@ -185,22 +186,23 @@ a{color:var(--blue)}
 
 <!-- LANGUAGE BAR -->
 <nav class="lang-bar notranslate" translate="no" aria-label="Language selection">
-  <span class="lang-bar-label"><span aria-hidden="true">🌐</span> Language:</span>
-  <button class="lang-btn active" onclick="switchLang('en')" aria-label="English" aria-pressed="true">English</button>
-  <button class="lang-btn" onclick="switchLang('es')" aria-label="Español" aria-pressed="false">Español</button>
-  <button class="lang-btn" onclick="switchLang('ko')" aria-label="한국어" aria-pressed="false">한국어</button>
-  <button class="lang-btn" onclick="switchLang('zh-TW')" aria-label="繁體中文" aria-pressed="false">繁體中文</button>
-  <button class="lang-btn" onclick="switchLang('hy')" aria-label="Հայերեն" aria-pressed="false">Հայերեն</button>
-  <button class="lang-btn" onclick="switchLang('tl')" aria-label="Tagalog" aria-pressed="false">Tagalog</button>
-  <button class="lang-btn" onclick="switchLang('fa')" aria-label="فارسی" aria-pressed="false">فارسی</button>
-
+  <img src="202403_Mayor_Logo_1800x468_transparent.png" alt="Office of Mayor Karen Bass, City of Los Angeles" style="height:36px;width:auto;">
+  <div class="lang-bar-langs">
+    <span class="lang-bar-label"><span aria-hidden="true">🌐</span> Language:</span>
+    <button class="lang-btn active" onclick="switchLang('en')" aria-label="English" aria-pressed="true">English</button>
+    <button class="lang-btn" onclick="switchLang('es')" aria-label="Español" aria-pressed="false">Español</button>
+    <button class="lang-btn" onclick="switchLang('ko')" aria-label="한국어" aria-pressed="false">한국어</button>
+    <button class="lang-btn" onclick="switchLang('zh-TW')" aria-label="繁體中文" aria-pressed="false">繁體中文</button>
+    <button class="lang-btn" onclick="switchLang('hy')" aria-label="Հայերեն" aria-pressed="false">Հայերեն</button>
+    <button class="lang-btn" onclick="switchLang('tl')" aria-label="Tagalog" aria-pressed="false">Tagalog</button>
+    <button class="lang-btn" onclick="switchLang('fa')" aria-label="فارسی" aria-pressed="false">فارسی</button>
+  </div>
 </nav>
 
 <!-- HERO -->
 <header class="hero" role="banner">
 <img class="hero-player" src="03-2026 Soccer Player.png" alt="" aria-hidden="true">
 <img class="hero-ball" src="03-2026 Soccer Ball.png" alt="" aria-hidden="true">
-<img src="202403_Mayor_Logo_1800x468_transparent.png" alt="Office of Mayor Karen Bass, City of Los Angeles" style="height:48px;width:auto;margin-bottom:.75rem;display:block;margin-left:auto;margin-right:auto;">
 <div class="hero-eyebrow" data-i18n="heroEyebrow">⚽ Los Angeles</div>
 <h1 aria-label="Kick it in the Park">Kick It In<br><em>The Park</em></h1>
 <p class="hero-sub" data-i18n="heroSub">Free community watch parties across the City of Los Angeles. Bring your chairs, your neighbors, and your World Cup spirit.</p>
